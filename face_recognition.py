@@ -23,9 +23,9 @@ class Predictor:
     def __init__(self, mtcnn_model_path, mobilefacenet_model_path, face_db_path, threshold=0.7):
         self.threshold = threshold
         self.mtcnn = MTCNN(model_path=mtcnn_model_path)
-        self.device = torch.device("cuda")
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         # 加载模型
-        self.model = torch.jit.load(mobilefacenet_model_path)
+        self.model = torch.jit.load(mobilefacenet_model_path, map_location=self.device)
         self.model.to(self.device)
         self.model.eval()
         self.faces_db = self.load_face_db(face_db_path)

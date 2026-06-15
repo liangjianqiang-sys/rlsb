@@ -25,19 +25,19 @@ class MTCNN:
     def __init__(self, model_path):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         # 获取P模型
-        self.pnet = torch.jit.load(os.path.join(model_path, 'PNet.pth'))
+        self.pnet = torch.jit.load(os.path.join(model_path, 'PNet.pth'), map_location=self.device)
         self.pnet.to(self.device)
         self.softmax_p = torch.nn.Softmax(dim=0)
         self.pnet.eval()
         print("P模型加载完成")
         # 获取R模型
-        self.rnet = torch.jit.load(os.path.join(model_path, 'RNet.pth'))
+        self.rnet = torch.jit.load(os.path.join(model_path, 'RNet.pth'), map_location=self.device)
         self.rnet.to(self.device)
         self.softmax_r = torch.nn.Softmax(dim=-1)
         self.rnet.eval()
         print("R模型加载完成")
         # 获取O模型
-        self.onet = torch.jit.load(os.path.join(model_path, 'ONet.pth'))
+        self.onet = torch.jit.load(os.path.join(model_path, 'ONet.pth'), map_location=self.device)
         self.onet.to(self.device)
         self.softmax_o = torch.nn.Softmax(dim=-1)
         self.onet.eval()
